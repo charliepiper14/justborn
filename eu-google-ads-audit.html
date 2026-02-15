@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J-Born EU | Google Ads Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-card: #16162a;
+  --bg-card-hover: #1e1e3a;
+  --border: rgba(255,255,255,0.06);
+  --accent-green: #00d9a5;
+  --accent-green-dim: rgba(0, 217, 165, 0.15);
+  --accent-purple: #8b5cf6;
+  --accent-purple-dim: rgba(139, 92, 246, 0.15);
+  --accent-red: #ef4444;
+  --accent-amber: #f59e0b;
+  --accent-blue: #3b82f6;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6b6b80;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 15px;
+}
+.slide {
+  min-height: 100vh;
+  padding: 48px 64px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+}
+.slide-number {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.slide-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-green);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.slide-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+h3 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+.cover {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(0, 217, 165, 0.05) 0%, transparent 40%);
+}
+.cover h1 { font-size: 56px; }
+.cover .meta {
+  margin-top: 48px;
+  display: flex;
+  gap: 48px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cover .meta span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 24px 0 32px 0;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+.metric-card.green { border-top: 3px solid var(--accent-green); }
+.metric-card.red { border-top: 3px solid var(--accent-red); }
+.metric-card.amber { border-top: 3px solid var(--accent-amber); }
+.metric-card.purple { border-top: 3px solid var(--accent-purple); }
+.metric-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.metric-value {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.metric-sub {
+  font-size: 12px;
+  margin-top: 8px;
+  color: var(--text-muted);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.data-table tr:hover td { background: var(--bg-card-hover); }
+.good { color: var(--accent-green); font-weight: 600; }
+.bad { color: var(--accent-red); font-weight: 600; }
+.warn { color: var(--accent-amber); font-weight: 600; }
+.neutral { color: var(--text-secondary); }
+.insight-box {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-green);
+  padding: 20px 24px;
+  margin: 20px 0;
+  border-radius: 0 12px 12px 0;
+}
+.insight-box.purple { border-left-color: var(--accent-purple); }
+.insight-box.red { border-left-color: var(--accent-red); }
+.insight-box.amber { border-left-color: var(--accent-amber); }
+.insight-box p { margin-bottom: 0; }
+.insight-box strong { color: var(--text-primary); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.timeline {
+  position: relative;
+  padding-left: 32px;
+  margin: 24px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-purple), var(--accent-green));
+  border-radius: 1px;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 28px;
+  padding-left: 16px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  border: 2px solid var(--bg-primary);
+}
+.timeline-item.purple::before { background: var(--accent-purple); }
+.timeline-item.amber::before { background: var(--accent-amber); }
+.timeline-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent-green);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.timeline-item.purple .timeline-label { color: var(--accent-purple); }
+.timeline-item.amber .timeline-label { color: var(--accent-amber); }
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+.funnel-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.funnel-step .step-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  width: 200px;
+  flex-shrink: 0;
+}
+.funnel-step .step-value {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.funnel-step .step-rate {
+  font-size: 13px;
+  font-weight: 600;
+  width: 120px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.funnel-step .step-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.funnel-step .step-bar-fill { height: 100%; border-radius: 4px; }
+@media print { .slide { page-break-after: always; } }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 4px; }
+@media (max-width: 768px) {
+  .slide { padding: 40px 24px; }
+  h1 { font-size: 36px; }
+  .slide-title { font-size: 28px; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: COVER -->
+<section class="slide cover">
+  <img src="https://res.cloudinary.com/dcnabm5nc/image/upload/v1754585626/lead-guru-new-logo-W-450_oyvumx.webp" alt="Heath Media" style="width: 180px; margin-bottom: 48px; opacity: 0.9;">
+  <div class="slide-tag">Google Ads Audit</div>
+  <h1>J-Born EU Account</h1>
+  <p class="subtitle">Performance Audit, Scaling Diagnosis and Growth Roadmap</p>
+  <div class="meta">
+    <span>February 2026</span>
+    <span>Current ROAS: 4.5x Blended</span>
+    <span>Target: 5.5x ROAS</span>
+    <span>Breakeven: 3.8x ROAS</span>
+  </div>
+</section>
+
+<!-- SLIDE 2: EXECUTIVE SUMMARY -->
+<section class="slide">
+  <span class="slide-number">02 / 15</span>
+  <div class="slide-tag">Executive Summary</div>
+  <h1 class="slide-title">The Short Version</h1>
+
+  <div class="metrics-grid">
+    <div class="metric-card green">
+      <div class="metric-label">90-Day Account ROAS</div>
+      <div class="metric-value">5.83x</div>
+      <div class="metric-sub">Nov 18 2025 to Feb 15 2026</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="metric-label">True Acquisition ROAS</div>
+      <div class="metric-value">4.25x</div>
+      <div class="metric-sub">PMax only (real new customer engine)</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">Account Direction</div>
+      <div class="metric-value">Contracting</div>
+      <div class="metric-sub">Spend down 19% vs prior period</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="metric-label">Scaling Potential</div>
+      <div class="metric-value">High</div>
+      <div class="metric-sub">Infrastructure fixes unlock growth</div>
+    </div>
+  </div>
+
+  <p>J-Born has built an impressive business from a standing start: nearly one million euros in annual revenue, a strong product line, fast fulfilment, and a creative team producing quality content. The EU Google Ads account shows healthy efficiency at current spend levels, with account-level ROAS exceeding the 5.5x target on paper. But that headline number is misleading.</p>
+
+  <p>The 5.83x account ROAS is heavily inflated by brand search campaigns capturing existing demand at 92.77x ROAS. Strip those out and the true acquisition engine, Performance Max, delivers 4.25x ROAS. That number only holds because spend has been pulled back to safe levels. When the account has attempted to scale beyond roughly 1,000 euros per day, ROAS collapses. This pattern has repeated for over 18 months and defeated previous agencies.</p>
+
+  <p>The root cause is not competition, creative quality, or market saturation. Auction insights show virtually no competitors in J-Born's paid search space. The scaling wall is caused by a combination of infrastructure failures: an 11.2-second mobile load time destroying conversions on 86% of traffic, broken conversion tracking sending corrupted signals to Google's bidding algorithm, a product feed with 60% of items marked ineligible, and search impression share at just 21.6% with over 80% lost to rank. Every one of these problems is fixable. Most can be resolved within 30 to 60 days.</p>
+</section>
+
+<!-- SLIDE 3: PERFORMANCE SNAPSHOT -->
+<section class="slide">
+  <span class="slide-number">03 / 15</span>
+  <div class="slide-tag">Performance Snapshot</div>
+  <h1 class="slide-title">Where Things Stand Today</h1>
+
+  <h2>Three Time Windows Compared</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Metric</th><th>90 Days (Nov 18 - Feb 15)</th><th>60 Days (Dec 18 - Feb 15)</th><th>30 Days (Jan 17 - Feb 15)</th><th>Trend</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Total Spend</td><td>&euro;45,154</td><td>&euro;26,331</td><td>&euro;12,485</td><td class="neutral">Declining</td></tr>
+      <tr><td>Daily Average Spend</td><td>&euro;502</td><td>&euro;439</td><td>&euro;416</td><td class="bad">Down 17%</td></tr>
+      <tr><td>Account ROAS</td><td>5.83x</td><td>5.72x</td><td>5.96x</td><td class="warn">Stable (brand inflated)</td></tr>
+      <tr><td>PMax ROAS</td><td>4.25x</td><td>4.21x</td><td>4.28x</td><td class="warn">Flat at 4.2x</td></tr>
+      <tr><td>Search ROAS</td><td>19.51x</td><td>20.81x</td><td>120.23x</td><td class="good">Brand capture only</td></tr>
+      <tr><td>Total Conversions</td><td>4,966</td><td>2,853</td><td>1,426</td><td class="neutral">Proportional to spend</td></tr>
+      <tr><td>New Customers %</td><td>54.4%</td><td>56.3%</td><td>57.9%</td><td class="good">Improving slightly</td></tr>
+      <tr><td>PMax Conv Rate</td><td>n/a</td><td>2.79%</td><td>n/a</td><td class="bad">Low</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box red">
+    <p><strong>The account is retreating, not scaling.</strong> Daily spend has fallen from &euro;606 in November to &euro;172 on February 15. Over 25 campaigns have been paused. Spend is being pulled back to maintain efficiency, but the underlying scaling problem remains unsolved. The account stays profitable at these levels but cannot grow toward the &euro;240,000 to &euro;250,000 monthly revenue target.</p>
+  </div>
+
+  <h2>Campaign Type Performance (90 Days)</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Campaign Type</th><th>Spend</th><th>ROAS</th><th>Conversions</th><th>New Customers</th><th>Role</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Performance Max</td><td>&euro;38,688</td><td class="warn">4.25x</td><td>3,192</td><td class="good">83.1%</td><td>Acquisition engine</td></tr>
+      <tr><td>Search</td><td>&euro;4,129</td><td class="good">19.51x</td><td>1,402</td><td class="bad">1.8%</td><td>Brand capture</td></tr>
+      <tr><td>Shopping</td><td>&euro;2,337</td><td class="good">7.79x</td><td>372</td><td class="bad">6.0%</td><td>Product discovery</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box amber">
+    <p><strong>The "120x Search ROAS" in the 30-day window is almost entirely brand capture.</strong> Search campaigns deliver 98.2% existing customers with only 1.8% new. The real acquisition ROAS is the PMax figure: 4.25x. That is below the 5.5x target and only slightly above the 3.8x breakeven. This is why scaling fails: push more budget into PMax and there is almost no margin for error.</p>
+  </div>
+</section>
+
+<!-- SLIDE 4: THE SCALING WALL -->
+<section class="slide">
+  <span class="slide-number">04 / 15</span>
+  <div class="slide-tag">Core Problem</div>
+  <h1 class="slide-title">Why Scaling Keeps Failing</h1>
+
+  <p style="margin-bottom: 24px;">The scaling wall is not caused by one issue. It is the compound effect of six infrastructure failures that amplify each other when budgets increase. At low spend levels, the system can tolerate these weaknesses. At higher spend, they compound and ROAS collapses.</p>
+
+  <div class="two-col">
+    <div>
+      <div class="insight-box red">
+        <h4 style="color: var(--accent-red); margin-bottom: 8px;">1. Mobile Speed Crisis</h4>
+        <p><strong>Mobile PageSpeed: 29/100. LCP: 11.2 seconds.</strong> The target for LCP is under 2.5 seconds. J-Born is 4.5x over that threshold. With 86% of ad traffic on mobile, every visitor waits nearly 12 seconds for the main content to load. Industry data shows roughly 7% conversion rate loss per second after the 2-second mark. At these speeds, an estimated 50 to 70% of potential conversions are being destroyed before visitors ever see the product.</p>
+      </div>
+      <div class="insight-box red">
+        <h4 style="color: var(--accent-red); margin-bottom: 8px;">2. Conversion Tracking Broken</h4>
+        <p><strong>Begin Checkout and Add to Cart events are misconfigured.</strong> Screenshots of the conversion goal settings confirm these critical events are not firing properly. Meanwhile, irrelevant goals like Phone Call Lead, Contact, and Get Directions are active across campaigns. Google is partially optimising PMax toward local business actions instead of purely toward purchases.</p>
+      </div>
+      <div class="insight-box red">
+        <h4 style="color: var(--accent-red); margin-bottom: 8px;">3. Impression Share at 21.6%</h4>
+        <p><strong>Over 80% of available search impressions are lost to rank.</strong> The EU Brand Search campaign, at 92.77x ROAS, only captures 30% of available brand searches with 71% lost to rank. J-Born is missing over 70% of people actively searching for the brand name. When they do appear, they rank at the top 96.4% of the time. The problem is not competitiveness. It is visibility.</p>
+      </div>
+    </div>
+    <div>
+      <div class="insight-box amber">
+        <h4 style="color: var(--accent-amber); margin-bottom: 8px;">4. PMax Channel Concentration</h4>
+        <p><strong>PMax spending 99.6% on Google Search.</strong> YouTube gets 0.1%, Display gets 0.1%, Discover gets 0.1%, Gmail gets 0.2%. Performance Max is designed to find customers across all Google surfaces. This account is functioning as an expensive Search campaign, missing the entire top-of-funnel discovery opportunity that PMax is built to deliver.</p>
+      </div>
+      <div class="insight-box amber">
+        <h4 style="color: var(--accent-amber); margin-bottom: 8px;">5. Product Feed Failures</h4>
+        <p><strong>60% of products marked "Not eligible" in Merchant Center.</strong> The feed shows a "Suspended account for data quality issues" flag and widespread "Out of stock" classifications. Fewer eligible products means less inventory for PMax and Shopping to work with, constraining the algorithm's ability to find new customers through product-led discovery.</p>
+      </div>
+      <div class="insight-box amber">
+        <h4 style="color: var(--accent-amber); margin-bottom: 8px;">6. CPC Inflation While Volume Contracts</h4>
+        <p><strong>Search CPC up 67% (&euro;0.09 to &euro;0.15). PMax CPC up 23% (&euro;0.31 to &euro;0.38).</strong> The account is paying more per click while getting fewer impressions. This is the hallmark of audience exhaustion: the same users are being shown ads repeatedly at progressively higher costs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: TOP CAMPAIGNS -->
+<section class="slide">
+  <span class="slide-number">05 / 15</span>
+  <div class="slide-tag">Campaign Performance</div>
+  <h1 class="slide-title">What Is Working and What Is Not</h1>
+
+  <h2>Top Spending Campaigns (90 Days: Nov 18 2025 to Feb 15 2026)</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Campaign</th><th>Spend</th><th>ROAS</th><th>Conversions</th><th>New Cust %</th><th>Conv Rate</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>EU5 PMAX | Gifts</td><td>&euro;8,310</td><td class="warn">4.44x</td><td>537</td><td>86.7%</td><td>2.48%</td></tr>
+      <tr><td>IT PMAX | Gifts</td><td>&euro;6,630</td><td class="warn">4.17x</td><td>422</td><td>83.1%</td><td>2.11%</td></tr>
+      <tr><td>EU5 PMAX | Bottle/Bag</td><td>&euro;4,062</td><td class="warn">4.56x</td><td>478</td><td>84.2%</td><td>4.72%</td></tr>
+      <tr><td>EU5 PMAX | Pacifiers</td><td>&euro;3,251</td><td class="warn">4.49x</td><td>377</td><td>81.9%</td><td>4.35%</td></tr>
+      <tr><td>IT PMAX | Btl/Bag/Meal/Bath/Toy</td><td>&euro;2,933</td><td class="warn">4.24x</td><td>225</td><td>86.2%</td><td>2.40%</td></tr>
+      <tr><td>EU Brand | Search</td><td>&euro;335</td><td class="good">92.77x</td><td>535</td><td>1.5%</td><td>9.25%</td></tr>
+      <tr><td>EU Brand | Shop</td><td>&euro;1,089</td><td class="good">8.00x</td><td>170</td><td>6.3%</td><td>1.63%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box">
+    <p><strong>All PMax campaigns cluster between 4.17x and 4.56x ROAS.</strong> This consistency suggests the ceiling is structural, not campaign-specific. Gifts campaigns have the lowest conversion rates (2.11% to 2.48%) but the highest spend. Bottle/Bag and Pacifiers convert nearly double (4.35% to 4.72%) at similar ROAS. This points to a potential reallocation opportunity: shift budget toward the higher-converting product categories while fixing the infrastructure that limits Gift campaign conversion rates.</p>
+  </div>
+
+  <h2>Biggest Spend Cuts (60 Days vs Prior 60 Days)</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Campaign</th><th>Current Period</th><th>Prior Period</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>IT PMAX | Gifts</td><td>&euro;3,384</td><td>&euro;6,718</td><td class="bad">-49.6%</td></tr>
+      <tr><td>IT PMAX | Bottle/Bag</td><td>&euro;422</td><td>&euro;1,275</td><td class="bad">-66.9%</td></tr>
+      <tr><td>IT PMAX | Btl/Bag/Meal/Bath/Toy</td><td>&euro;1,372</td><td>&euro;2,864</td><td class="bad">-52.1%</td></tr>
+      <tr><td>EU5 PMAX | Gifts</td><td>&euro;4,812</td><td>&euro;7,172</td><td class="bad">-32.9%</td></tr>
+      <tr><td>ALL Feed | Soft Toys</td><td>&euro;128</td><td>&euro;1,370</td><td class="bad">-90.7%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box amber">
+    <p><strong>The spend contraction is accelerating.</strong> Every major PMax campaign has been cut vs the prior period. Only EU Brand Shop (+109%) and EU5 Feed Others (+503%) grew, but these are lower-funnel brand-adjacent campaigns. February daily spend dropped to &euro;388, the lowest month on record, down from &euro;606 in November.</p>
+  </div>
+</section>
+
+<!-- SLIDE 6: ATTRIBUTION -->
+<section class="slide">
+  <span class="slide-number">06 / 15</span>
+  <div class="slide-tag">Attribution Analysis</div>
+  <h1 class="slide-title">How Customers Actually Convert</h1>
+
+  <div class="metrics-grid">
+    <div class="metric-card purple">
+      <div class="metric-label">Multi-Touch Conversions</div>
+      <div class="metric-value">59%</div>
+      <div class="metric-sub">Require 2+ ad interactions</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Avg Days to Convert</div>
+      <div class="metric-value">2.8</div>
+      <div class="metric-sub">From first to last interaction</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="metric-label">Avg Interactions</div>
+      <div class="metric-value">2.6</div>
+      <div class="metric-sub">Before purchase</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Same Day Conversions</div>
+      <div class="metric-value">78.1%</div>
+      <div class="metric-sub">Convert within 24 hours</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>What This Means for Scaling</h3>
+      <p>The majority of customers need more than one interaction before purchasing. The 2.8-day average conversion window means retargeting within the first 3 days is critical. However, the current account structure lacks a dedicated retargeting strategy for Google. Site visitors, cart abandoners, and engaged users are not being systematically re-engaged.</p>
+
+      <div class="insight-box purple">
+        <p><strong>Brand Search does double duty.</strong> It generates 92 click-and-view assists worth &euro;4,573 in the 30-day window, on top of its direct conversions. Under data-driven attribution, Brand Search receives 26% fewer conversions credited than under last-click, while PMax campaigns gain credit. This means PMax true performance is slightly better than campaign-level reports suggest.</p>
+      </div>
+    </div>
+    <div>
+      <h3>Cross-Device Patterns</h3>
+      <p>7% of conversions involve cross-device paths (20 conversions in the 30-day window). The primary pattern is mobile browsing followed by desktop purchase. This is further evidence of the mobile speed problem: users discover products on mobile through PMax ads, but the slow mobile site experience pushes them to complete the purchase later on desktop where the site loads faster (desktop LCP is 1.4 seconds vs mobile at 11.2 seconds).</p>
+
+      <h3>Model Comparison</h3>
+      <p>When switching from last-click to data-driven attribution, the account shows 13.09% more total conversions (177 to 200.17). Brand Search drops 25.66% in credited conversions while PMax campaigns gain. The algorithm recognises that PMax is doing more upstream discovery work than last-click reports show.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: MOBILE SPEED -->
+<section class="slide">
+  <span class="slide-number">07 / 15</span>
+  <div class="slide-tag">Site Speed</div>
+  <h1 class="slide-title">The Conversion Killer</h1>
+
+  <div class="metrics-grid">
+    <div class="metric-card red">
+      <div class="metric-label">Mobile Performance</div>
+      <div class="metric-value">29/100</div>
+      <div class="metric-sub">PageSpeed Insights</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">Mobile LCP</div>
+      <div class="metric-value">11.2s</div>
+      <div class="metric-sub">Target: under 2.5 seconds</div>
+    </div>
+    <div class="metric-card amber">
+      <div class="metric-label">Desktop Performance</div>
+      <div class="metric-value">39/100</div>
+      <div class="metric-sub">Desktop LCP: 1.4 seconds</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">Mobile Traffic Share</div>
+      <div class="metric-value">86%</div>
+      <div class="metric-sub">&euro;38,092 of &euro;45,154 total spendeuro;22,803 of &euro;38,092 of &euro;45,154 total spendeuro;26,332 (60-day window)</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Full Mobile Diagnostics</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Metric</th><th>Score</th><th>Target</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Performance</td><td>29</td><td>90+</td><td class="bad">Critical</td></tr>
+          <tr><td>LCP</td><td>11.2s</td><td>Under 2.5s</td><td class="bad">4.5x over</td></tr>
+          <tr><td>FCP</td><td>2.8s</td><td>Under 1.8s</td><td class="warn">Slow</td></tr>
+          <tr><td>Speed Index</td><td>8.4s</td><td>Under 3.4s</td><td class="bad">2.5x over</td></tr>
+          <tr><td>TBT</td><td>640ms</td><td>Under 200ms</td><td class="bad">3.2x over</td></tr>
+          <tr><td>CLS</td><td>0.211</td><td>Under 0.1</td><td class="warn">Layout shift</td></tr>
+          <tr><td>Accessibility</td><td>85</td><td>90+</td><td class="warn">Acceptable</td></tr>
+          <tr><td>SEO</td><td>100</td><td>90+</td><td class="good">Excellent</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Root Causes</h3>
+      <p>The main culprits flagged by PageSpeed are render-blocking resources, unoptimised images, excessive JavaScript, and layout shift from dynamically loaded elements. The personalisation preview feature, review widgets, and Shopify app scripts are the likely contributors.</p>
+
+      <div class="insight-box red">
+        <p><strong>This is the single highest-impact fix available.</strong> At current traffic volumes with 86% mobile, the difference between an 11-second and a 3-second load time could double the PMax conversion rate from 2.79% to over 5%. That alone would push PMax ROAS from 4.25x toward the 5.5x target without changing a single ad or budget.</p>
+      </div>
+      <div class="insight-box">
+        <p><strong>Desktop is a different story.</strong> At 39/100 with 1.4-second LCP, the desktop experience is dramatically faster. This explains why cross-device conversion patterns exist: users who browse on mobile but complete on desktop are escaping the mobile speed problem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: CONVERSION TRACKING -->
+<section class="slide">
+  <span class="slide-number">08 / 15</span>
+  <div class="slide-tag">Conversion Tracking</div>
+  <h1 class="slide-title">The Algorithm Is Getting Bad Data</h1>
+
+  <div class="two-col">
+    <div>
+      <h3>Misconfigured Events</h3>
+      <p>Screenshots from the Google Ads conversion settings reveal multiple critical issues with the tracking setup. Begin Checkout and Add to Cart events are misconfigured, which explains why all checkout data in the reports shows 0.00 across the board.</p>
+      <p>Page View tracking is also misconfigured. These are the three most important mid-funnel signals that Google uses to optimise bidding in Performance Max campaigns. Without accurate data on who is adding to cart and beginning checkout, the algorithm cannot efficiently identify and target high-intent shoppers.</p>
+
+      <div class="insight-box red">
+        <p><strong>Irrelevant conversion goals are active.</strong> Phone Call Lead, Contact, and Get Directions goals are enabled across the account. These are local business actions that have no relevance to an e-commerce operation. Google is partially optimising PMax toward generating phone calls and map directions alongside purchases.</p>
+      </div>
+    </div>
+    <div>
+      <h3>Goal Configuration Issues</h3>
+      <p>Most campaigns optimise for a mixed goal set: [BEGIN_CHECKOUT/WEBSITE, DOWNLOAD/APP, PURCHASE/WEBSITE]. The DOWNLOAD/APP goal should not exist in an e-commerce campaign. Some campaigns correctly optimise for [PURCHASE/WEBSITE] only, creating an inconsistent setup.</p>
+
+      <div class="insight-box amber">
+        <p><strong>Combined impact.</strong> Broken checkout tracking plus irrelevant goals plus inconsistent goal configuration means Google's Smart Bidding is operating on fundamentally flawed data. This is why performance deteriorates at scale: the algorithm's errors compound as more budget flows through the system.</p>
+      </div>
+      <div class="insight-box">
+        <p><strong>The fix is straightforward.</strong> Remove Phone Call Lead, Contact, and Get Directions goals. Remove the DOWNLOAD/APP goal. Fix Begin Checkout and Add to Cart event configuration. Standardise all campaigns to optimise for PURCHASE/WEBSITE only. Verify tracking fires correctly using Google Tag Assistant. This can be completed within the first week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9: CRO -->
+<section class="slide">
+  <span class="slide-number">09 / 15</span>
+  <div class="slide-tag">CRO Analysis</div>
+  <h1 class="slide-title">Site Experience Review</h1>
+
+  <div class="two-col">
+    <div>
+      <h3>Homepage Issues</h3>
+      <p>The hero section does not communicate the personalisation USP above the fold for cold traffic. Visitors who have never heard of J-Born need to immediately understand what makes the brand different: personalised baby products with same-day engraving and next-day delivery.</p>
+
+      <h3>Product Detail Pages</h3>
+      <p>Review counts are low. A premium gift set shows only a handful of reviews, providing insufficient social proof. Trust badges are present but buried below the fold. The personalisation options are well-executed and front-and-centre, which is a genuine strength.</p>
+
+      <div class="insight-box amber">
+        <p><strong>AOV optimisation is undercooked.</strong> Product pages show only a few cross-sell suggestions. There is no bundle builder, no visible free shipping threshold, and no urgency triggers. With a small average order value being a stated challenge, every PDP visit needs to work harder to increase basket size.</p>
+      </div>
+    </div>
+    <div>
+      <h3>What Works Well</h3>
+      <p>The personalisation preview feature is excellent and gives the site a genuine competitive advantage. Multiple payment options are available. The checkout process appears clean once users reach it. Trust badges are present throughout.</p>
+
+      <h3>Key Recommendations</h3>
+      <div class="insight-box">
+        <p><strong>Homepage hero rewrite.</strong> Replace the generic hero with a headline that leads with personalisation. Communicate engraved names on premium baby products with same-day turnaround immediately.</p>
+      </div>
+      <div class="insight-box">
+        <p><strong>Social proof sprint.</strong> Implement a post-delivery review generation programme. Feature aggregate ratings prominently on PDPs. Consider importing reviews from marketplace channels.</p>
+      </div>
+      <div class="insight-box">
+        <p><strong>Free shipping threshold.</strong> Add a visible progress bar showing proximity to free shipping. This is one of the most reliable AOV levers in e-commerce.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10: DEMOGRAPHICS -->
+<section class="slide">
+  <span class="slide-number">10 / 15</span>
+  <div class="slide-tag">Demographics and Audience</div>
+  <h1 class="slide-title">Who Is Buying</h1>
+
+  <h2>Demographic Profile (60-Day Window)</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Segment</th><th>Impression Share</th><th>Observations</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Female 25-34</td><td class="good">51.21%</td><td>Core buyer. New parents. Highest volume segment.</td></tr>
+      <tr><td>Female 35-44</td><td class="good">22.75%</td><td>Strong secondary. Gift buyers and second-time parents.</td></tr>
+      <tr><td>Female 18-24</td><td>5.12%</td><td>Smaller but growing. Gift-occasion buyers.</td></tr>
+      <tr><td>Female 45-54</td><td>4.15%</td><td>Grandparent segment. Gift-oriented.</td></tr>
+      <tr><td>Male (all ages)</td><td class="warn">12.80%</td><td>Small share. Likely gifting partners.</td></tr>
+      <tr><td>Female 55+</td><td>4.05%</td><td>Grandparent gifters.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div>
+      <div class="insight-box">
+        <p><strong>The ICP is clear: women aged 25 to 44 represent 73.96% of impressions.</strong> This aligns perfectly with the new parent and baby gift buyer profile. The audience targeting is well-calibrated. Google's algorithm has been narrowing toward the higher-performing female audience as budgets contracted.</p>
+      </div>
+    </div>
+    <div>
+      <div class="insight-box purple">
+        <p><strong>Engagement peaks at 8 to 10 PM.</strong> Hour-of-day data shows the highest impression volumes between 8 PM and 10 PM (316,253 to 354,399 impressions per hour over 60 days), with a secondary peak at 2 to 3 PM. This matches the new parent browsing pattern: shopping after children go to bed.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Device Split (90 Days)</h2>
+  <div class="metrics-grid">
+    <div class="metric-card purple">
+      <div class="metric-label">Mobile</div>
+      <div class="metric-value">86.6%</div>
+      <div class="metric-sub">&euro;38,092 spend | 4,146 conversionseuro;22,803 spend | 2,473 conversions</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Desktop</div>
+      <div class="metric-value">13.1%</div>
+      <div class="metric-sub">&euro;6,879 spend | 802 conversionseuro;3,440 spend | 370 conversions</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Tablet</div>
+      <div class="metric-value">0.3%</div>
+      <div class="metric-sub">&euro;166 spend | 18 conversionseuro;79 spend | 9 conversions</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">CPA Consistency</div>
+      <div class="metric-value">&euro;8.75</div>
+      <div class="metric-sub">Nearly identical across all devices</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11: ASSET QUALITY & FEED -->
+<section class="slide">
+  <span class="slide-number">11 / 15</span>
+  <div class="slide-tag">Asset Quality and Product Feed</div>
+  <h1 class="slide-title">Content and Catalogue Health</h1>
+
+  <div class="two-col">
+    <div>
+      <h2>Asset Group Ad Strength (90 Days)</h2>
+      <div style="margin-bottom: 24px;">
+        <div class="funnel-step">
+          <div class="step-name">Poor</div>
+          <div class="step-value">215</div>
+          <div class="step-bar"><div class="step-bar-fill" style="width:57%; background: var(--accent-red);"></div></div>
+          <div class="step-rate bad">57.3%</div>
+        </div>
+        <div class="funnel-step">
+          <div class="step-name">Average</div>
+          <div class="step-value">71</div>
+          <div class="step-bar"><div class="step-bar-fill" style="width:19%; background: var(--accent-amber);"></div></div>
+          <div class="step-rate warn">18.9%</div>
+        </div>
+        <div class="funnel-step">
+          <div class="step-name">Excellent</div>
+          <div class="step-value">73</div>
+          <div class="step-bar"><div class="step-bar-fill" style="width:19.5%; background: var(--accent-green);"></div></div>
+          <div class="step-rate good">19.5%</div>
+        </div>
+        <div class="funnel-step">
+          <div class="step-name">Good</div>
+          <div class="step-value">14</div>
+          <div class="step-bar"><div class="step-bar-fill" style="width:3.7%; background: var(--accent-blue);"></div></div>
+          <div class="step-rate neutral">3.7%</div>
+        </div>
+      </div>
+
+      <div class="insight-box red">
+        <p><strong>57% of asset groups are rated "Poor" by Google.</strong> Excellent-rated groups like IT PMAX Gifts (&euro;6,630 spend, 4.17x ROAS) and FRIGG FR (&euro;1,108, 5.42x ROAS) consistently outperform Poor-rated groups. Improving asset quality across the 215 Poor groups would lift PMax performance across the board.</p>
+      </div>
+    </div>
+    <div>
+      <h2>Product Feed Health</h2>
+      <div class="insight-box red">
+        <p><strong>60% of products are marked "Not eligible."</strong> A massive red bar in the Merchant Center diagnostics shows the majority of the catalogue is not being served. The primary issues flagged are "Suspended account for data quality issues" and "Out of stock" classifications.</p>
+      </div>
+      <div class="insight-box amber">
+        <p><strong>Data quality suspension is critical.</strong> A Merchant Center data quality suspension means Google has detected discrepancies between the product feed and the actual website. Common causes include price mismatches, availability mismatches, missing required attributes, or image quality issues. Resolving this would immediately expand the eligible product inventory from roughly 40% to near 100%.</p>
+      </div>
+
+      <h2>Optimisation Scores</h2>
+      <p>Active PMax campaigns score well: IT PMAX Gifts at 100%, EU5 PMAX Bottle/Bag at 96.4%, EU5 PMAX Pacifiers at 94%. The issue is not campaign setup quality. It is the infrastructure beneath the campaigns.</p>
+
+      <h2>Top Performing Asset Groups</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Asset Group</th><th>Spend</th><th>ROAS</th><th>Strength</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>FRIGG FR (EU5 Pacifiers)</td><td>&euro;1,108</td><td class="good">5.42x</td><td class="good">Excellent</td></tr>
+          <tr><td>Bottle DE (EU5 Bottle/Bag)</td><td>&euro;668</td><td class="good">5.03x</td><td class="good">Excellent</td></tr>
+          <tr><td>Gifts ES (EU5 Gifts)</td><td>&euro;1,999</td><td class="good">4.89x</td><td class="good">Excellent</td></tr>
+          <tr><td>FRIGG IT (IT Pacifiers)</td><td>&euro;998</td><td class="good">4.83x</td><td class="good">Excellent</td></tr>
+          <tr><td>Gifts NL (EU5 Gifts)</td><td>&euro;2,110</td><td class="good">4.71x</td><td class="good">Excellent</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12: COMPETITIVE LANDSCAPE -->
+<section class="slide">
+  <span class="slide-number">12 / 15</span>
+  <div class="slide-tag">Competitive Landscape</div>
+  <h1 class="slide-title">The Market Is Wide Open</h1>
+
+  <div class="metrics-grid">
+    <div class="metric-card green">
+      <div class="metric-label">Auction Competitors</div>
+      <div class="metric-value">1</div>
+      <div class="metric-sub">Only amazon.it visible in auctions</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">J-Born Impression Share</div>
+      <div class="metric-value">19.16%</div>
+      <div class="metric-sub">Missing 80%+ of available searches</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Top of Page Rate</div>
+      <div class="metric-value">96.4%</div>
+      <div class="metric-sub">When visible, always at top</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Amazon.it Overlap</div>
+      <div class="metric-value">7.01%</div>
+      <div class="metric-sub">Minimal direct competition</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <p><strong>This is the most important finding from the competitive analysis.</strong> J-Born is operating in a nearly uncontested Google Ads space. The only competitor appearing in auction insights is amazon.it, and with less than 10% impression share and only 7% overlap. The scaling wall is not caused by being outbid or outcompeted. It is entirely caused by internal infrastructure problems. Fix the site speed, tracking, and feed issues, and J-Born can capture a dramatically larger share of available demand without needing to outbid anyone.</p>
+  </div>
+
+  <h2>Category Competitors (Not in Google Ads Auctions)</h2>
+  <table class="data-table">
+    <thead>
+      <tr><th>Competitor</th><th>Markets</th><th>Positioning</th><th>Threat Level</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>MyPacifier / ByHappyMe</td><td>Pan-EU (10+ countries)</td><td>Multi-brand engraved pacifiers (MAM, BIBS, FRIGG)</td><td class="warn">Medium</td></tr>
+      <tr><td>My 1st Years</td><td>UK + EU</td><td>Premium personalised baby gifts, embroidered</td><td class="warn">Medium (UK focused)</td></tr>
+      <tr><td>Ciucciomania</td><td>Italy</td><td>Italian pacifier specialist, multiple brands</td><td class="neutral">Low</td></tr>
+      <tr><td>Sucette-perso.fr</td><td>France, Belgium, Switzerland</td><td>French personalised pacifier specialist</td><td class="neutral">Low</td></tr>
+      <tr><td>YourSurprise.eu</td><td>Pan-EU</td><td>General personalised gifts platform</td><td class="warn">Medium</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box purple">
+    <p><strong>J-Born's competitive advantages are substantial.</strong> Same-day and next-day fulfilment beats most competitors' 3 to 7 day delivery. The FRIGG and BIBS personalisation with laser engraving is premium. The multi-category approach creates cross-sell opportunities most specialists cannot match. The absence of competitors from Google Ads auctions suggests they are either not advertising on Google or targeting different keyword sets entirely.</p>
+  </div>
+</section>
+
+<!-- SLIDE 13: SEARCH TERMS -->
+<section class="slide">
+  <span class="slide-number">13 / 15</span>
+  <div class="slide-tag">Search Terms Analysis</div>
+  <h1 class="slide-title">What People Search For</h1>
+
+  <div class="two-col">
+    <div>
+      <h3>Brand Terms (60 Days)</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Search Term</th><th>Spend</th><th>Clicks</th><th>Impressions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>jborn</td><td>&euro;196</td><td>4,763</td><td>51,509</td></tr>
+          <tr><td>j born</td><td>&euro;86</td><td>1,447</td><td>24,013</td></tr>
+          <tr><td>just born</td><td>&euro;33</td><td>215</td><td>2,462</td></tr>
+          <tr><td>j born eu</td><td>&euro;10</td><td>141</td><td>2,127</td></tr>
+        </tbody>
+      </table>
+
+      <div class="insight-box amber">
+        <p><strong>All brand terms show 0.00 conversions in the search term report.</strong> This is not because brand searches fail to convert. It is because search term attribution is broken due to the misconfigured conversion tracking. The EU Brand Search campaign at 92.77x ROAS confirms these terms do convert at high rates. The reporting simply cannot attribute conversions to specific search terms.</p>
+      </div>
+    </div>
+    <div>
+      <h3>Top Generic Terms (Multi-Language)</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Search Term</th><th>Language</th><th>Impressions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>sucette bebe / tetine bebe</td><td>French</td><td>6,256 / 6,078</td></tr>
+          <tr><td>tetine mam</td><td>French</td><td>4,209</td></tr>
+          <tr><td>doudou neonato</td><td>Italian</td><td>1,700+</td></tr>
+          <tr><td>tetine bibs</td><td>French</td><td>1,803</td></tr>
+          <tr><td>ciuccio personalizzato</td><td>Italian</td><td>High via PMax</td></tr>
+          <tr><td>rvs drinkfles kind</td><td>Dutch</td><td>Strong (9.50 conv/30d)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="insight-box">
+        <p><strong>Multi-language coverage is strong.</strong> J-Born appears for French, Italian, German, Dutch, and Spanish queries across pacifiers, gifts, bottles, and accessories. The 30-day data with working conversion attribution shows strong performers: "rvs drinkfles kind" at 8.64% conversion rate, "porta ciuccio personalizzato" at 5.88%, and "ciuccio personalizzato" at 6.05%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 14: SCALING ROADMAP -->
+<section class="slide">
+  <span class="slide-number">14 / 15</span>
+  <div class="slide-tag">Scaling Roadmap</div>
+  <h1 class="slide-title">Breaking Through the Wall</h1>
+
+  <p style="margin-bottom: 24px;">The scaling wall will not break by simply increasing budgets. Each phase addresses specific infrastructure failures that must be resolved before spend can be increased sustainably.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 1: Fix the Foundation (Weeks 1 to 4)</div>
+      <h4>Stop the Bleeding</h4>
+      <p>Remove irrelevant conversion goals (Phone Call, Contact, Get Directions, Download/App). Fix Begin Checkout and Add to Cart event tracking. Standardise all campaigns to optimise for Purchase only. Resolve Merchant Center data quality suspension. Fix product feed to move 60% ineligible products to eligible status. Begin mobile page speed optimisation (image compression, lazy loading, script audit). Target: restore tracking integrity and feed health.</p>
+    </div>
+    <div class="timeline-item purple">
+      <div class="timeline-label">Phase 2: Unlock Channels (Weeks 5 to 8)</div>
+      <h4>Expand Reach Beyond Search</h4>
+      <p>With tracking fixed and the feed restored, begin testing PMax channel expansion into YouTube, Display, and Discover. Improve asset group quality across the 215 Poor-rated groups. Build dedicated retargeting campaigns for site visitors and cart abandoners. Increase Brand Search impression share from 30% toward 70% by adjusting bid strategy. Target: PMax ROAS stable at 4.5x+ on 30% higher daily spend.</p>
+    </div>
+    <div class="timeline-item amber">
+      <div class="timeline-label">Phase 3: Scale (Weeks 9 to 16)</div>
+      <h4>Push Budget Into What Works</h4>
+      <p>Increase daily spend by 15 to 20% per week on campaigns exceeding 5.0x ROAS. Expand EU5 campaigns into additional markets beyond IT, DE, FR, NL, ES. Launch new product categories (clothing line) with dedicated PMax campaigns. Implement homepage and PDP CRO improvements. Scale to &euro;800 to &euro;1,200 per day. Target: account ROAS at 5.5x with monthly revenue of &euro;150,000+.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Phase 4: Compound (Months 5 to 12)</div>
+      <h4>Reach the Revenue Target</h4>
+      <p>Maintain 4 to 6 week creative refresh cycle. Scale to &euro;1,500+ per day across EU markets. Expand into new markets that previously underperformed (now with fixed infrastructure). Optimise for lifetime value through post-purchase email flows and repeat purchase campaigns. Target: &euro;240,000 to &euro;250,000 monthly revenue from EU Google Ads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 15: PROJECTIONS -->
+<section class="slide">
+  <span class="slide-number">15 / 15</span>
+  <div class="slide-tag">Revenue Projections</div>
+  <h1 class="slide-title">What the Numbers Could Look Like</h1>
+
+  <p style="margin-bottom: 24px;">Three scenarios based on execution depth. Conservative assumes foundational fixes only (tracking and feed). Moderate includes CRO and channel expansion. Aggressive assumes all recommendations implemented on schedule with strong new product launches.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Month</th><th>Conservative Daily Spend</th><th>Conservative ROAS</th><th>Moderate Daily Spend</th><th>Moderate ROAS</th><th>Aggressive Daily Spend</th><th>Aggressive ROAS</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Mar 2026</td><td>&euro;500</td><td class="warn">4.5x</td><td>&euro;600</td><td class="warn">4.8x</td><td>&euro;700</td><td class="good">5.0x</td></tr>
+      <tr><td>Apr 2026</td><td>&euro;550</td><td class="warn">4.7x</td><td>&euro;700</td><td class="good">5.0x</td><td>&euro;850</td><td class="good">5.3x</td></tr>
+      <tr><td>May 2026</td><td>&euro;600</td><td class="warn">4.8x</td><td>&euro;800</td><td class="good">5.2x</td><td>&euro;1,000</td><td class="good">5.5x</td></tr>
+      <tr><td>Jun 2026</td><td>&euro;650</td><td class="good">5.0x</td><td>&euro;900</td><td class="good">5.3x</td><td>&euro;1,100</td><td class="good">5.5x</td></tr>
+      <tr><td>Jul 2026</td><td>&euro;700</td><td class="good">5.0x</td><td>&euro;1,000</td><td class="good">5.5x</td><td>&euro;1,200</td><td class="good">5.5x</td></tr>
+      <tr><td>Aug 2026</td><td>&euro;750</td><td class="good">5.0x</td><td>&euro;1,100</td><td class="good">5.5x</td><td>&euro;1,400</td><td class="good">5.5x</td></tr>
+      <tr><td>Sep 2026</td><td>&euro;800</td><td class="good">5.0x</td><td>&euro;1,200</td><td class="good">5.5x</td><td>&euro;1,500</td><td class="good">5.5x</td></tr>
+    </tbody>
+  </table>
+
+  <div class="three-col" style="margin-top:24px;">
+    <div class="metric-card amber">
+      <div class="metric-label">Conservative (7 months)</div>
+      <div class="metric-value">&euro;668K</div>
+      <div class="metric-sub">Total revenue, 4.8x avg ROAS</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="metric-label">Moderate (7 months)</div>
+      <div class="metric-value">&euro;1.09M</div>
+      <div class="metric-sub">Total revenue, 5.2x avg ROAS</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Aggressive (7 months)</div>
+      <div class="metric-value">&euro;1.47M</div>
+      <div class="metric-sub">Total revenue, 5.4x avg ROAS</div>
+    </div>
+  </div>
+
+  <div class="insight-box purple" style="margin-top:24px;">
+    <p><strong>These projections cover EU Google Ads only.</strong> The UK Google Ads account, Meta campaigns, Klaviyo email revenue, Amazon, Etsy, and organic traffic are all additive. The aggressive scenario reaches a &euro;247,500 monthly run rate by September 2026 from EU Google Ads alone, which aligns closely with the &euro;240,000 to &euro;250,000 monthly target Deniss outlined for the EU market.</p>
+  </div>
+</section>
+
+
+
+</body>
+</html>
